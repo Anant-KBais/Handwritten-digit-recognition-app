@@ -1,7 +1,7 @@
 '''Trains a simple convnet on the MNIST dataset.
 Gets to 99.21% test accuracy after 12 epochs
 (there is still a lot of margin for parameter tuning).
-128 seconds per epoch on a intel i5 CPU.
+
 '''
 
 from __future__ import print_function
