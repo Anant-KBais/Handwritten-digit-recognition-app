@@ -3,7 +3,7 @@ from __future__ import division, print_function, absolute_import
 
 import numpy as np
 from tkinter import *
-from PIL import Image, ImageDraw 
+from PIL import Image, ImageDraw, ImageGrab, ImageChops
 import tensorflow as tf
 
 root = Tk() #interface
@@ -45,11 +45,15 @@ class ImageGenerator:
 
     def b1down(self, event):
         self.b1 = "down"
+        self.x1 = self.posx
+        self.y1 = self.posy
 
     def b1up(self, event):
         self.b1 = "up"
         self.xold = None
         self.yold = None
+        self.x2 = self.posx
+        self.y2 = self.posy
 
     def motion(self,event):
         if self.b1 == "down":
@@ -71,11 +75,15 @@ def prediction():
    
     loaded_model = tf.keras.models.load_model("model.tf")
     img = a.image
-    img = img.convert('L')
-    
+    # img  = ImageGrab.grab(bbox=(a.x1-50, a.y1-50,a.x2+50, a.y2+50) )
     img = img.resize((28,28))
+    img = img.convert('L')
+    img = ImageChops.invert(img)
+    
+    
     img.save("a.png")
-    img = np.array(img.getdata()).reshape(img.size[0],img.size[1],1)
+    img = np.array(img)
+    # .reshape(img.size[0],img.size[1],1)
     
     img = np.expand_dims(img, axis=0)
     X_test = img
